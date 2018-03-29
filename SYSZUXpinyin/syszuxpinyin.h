@@ -41,13 +41,14 @@ public:
     void changeInputMethod();
     void changeLowerUpper();
     void clearString();
-    void affirmString();
+    void affirmString(QString text);
     void deleteString();
 
     //窗口可托动有重写
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void selectHanzi(int index);
 
 public slots:
     void buttonClickResponse(int gemfield);

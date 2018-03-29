@@ -95,9 +95,7 @@ void SyszuxPinyin::buttonClickResponse(int gemfield)
     }
     else if(gemfield<10)//汉字候选按钮
     {
-        lineEdit_window->insert(button_vector.at(gemfield-1)->text());//选择的汉字添加到输入框
-        lineEdit_pinyin->clear();//清除拼音输入框
-        clearString();////清除汉字候选控件内容
+        selectHanzi(gemfield);
         return;
     }
     else if(gemfield==23)//按键backspace
@@ -110,16 +108,29 @@ void SyszuxPinyin::buttonClickResponse(int gemfield)
          changeLowerUpper();
          return;
     }
-    else if(gemfield!=47)//按键Enter
+    else if(47 == gemfield)//按键Enter
     {
 
     }
     else if(gemfield>10 && gemfield<=60)//非功能按键（0~9，a~z,标点）
     {
-        if(lower_upper)//小写模式时
+        if(lower_upper)//大写模式时
+        {
+
             event=new QKeyEvent(QEvent::KeyPress, 0, Qt::NoModifier,syszux_upper_letter[gemfield-11]);
-        else            //大写模式
+        }
+        else  //小写模式
+        {
+            if(60 == gemfield)//空格键
+            {
+                if((input_method) && (!lineEdit_pinyin->text().isEmpty()))//中文输入模式,拼音框非空
+                {
+                    selectHanzi(2);
+                    return;
+                }
+            }
             event=new QKeyEvent(QEvent::KeyPress, 0, Qt::NoModifier,syszux_lower_letter[gemfield-11]);
+        }
     }
     else if(gemfield==61)//中英模式切换按键
     {
@@ -128,7 +139,8 @@ void SyszuxPinyin::buttonClickResponse(int gemfield)
     }
     else if(gemfield==62)//按键ok
     {
-        affirmString();
+        //affirmString(lineEdit_window->text());
+        affirmString("");
         return;
     }
     else if(gemfield>62)//方向按键
@@ -157,8 +169,9 @@ void SyszuxPinyin::buttonClickResponse(int gemfield)
     }
     else//英文输入模式
     {
-        lineEdit_window->setFocus();
-        QApplication::sendEvent(focusWidget(),event);
+        //lineEdit_window->setFocus();
+        //QApplication::sendEvent(focusWidget(),event);
+        QApplication::sendEvent(QApplication::focusWidget(), event);
     }
 }
 
@@ -236,33 +249,44 @@ void SyszuxPinyin::changeLowerUpper()
     }
 }
 
+//选中第index个汉字
+void SyszuxPinyin::selectHanzi(int index)
+{
+    //lineEdit_window->insert(button_vector.at(index-1)->text());//选择的汉字添加到输入框
+    sendPinyin(button_vector.at(index-1)->text());
+    lineEdit_pinyin->clear();//清除拼音输入框
+    clearString();////清除汉字候选控件内容
+}
+
 //退格键消息处理
 void SyszuxPinyin::deleteString()
 {
     event=new QKeyEvent(QEvent::KeyPress, Qt::Key_Backspace, Qt::NoModifier);
     //如果输入法窗口的输入框和拼音输入框都为空，删除当前焦点的控件的内容
-    if(lineEdit_pinyin->text().isEmpty() && lineEdit_window->text().isEmpty())
+    //if(lineEdit_pinyin->text().isEmpty() && lineEdit_window->text().isEmpty())
+    if(lineEdit_pinyin->text().isEmpty())
     {
         QApplication::sendEvent(QApplication::focusWidget(),event);
     }
     else if(input_method)//中文输入模式，先删除拼音输入框内容，再删除输入框内容
     {
-        lineEdit_pinyin->text().isEmpty()?lineEdit_window->setFocus():lineEdit_pinyin->setFocus();
+        //lineEdit_pinyin->text().isEmpty()?lineEdit_window->setFocus():lineEdit_pinyin->setFocus();
+        lineEdit_pinyin->setFocus();
         QApplication::sendEvent(focusWidget(),event);
         matching(lineEdit_pinyin->text());
     }
     else//英文输入模式，直接删除输入框内容
     {
-        lineEdit_window->setFocus();
+        //lineEdit_window->setFocus();
         QApplication::sendEvent(focusWidget(),event);
     }
 }
 
 //ok按键
-void SyszuxPinyin::affirmString()
+void SyszuxPinyin::affirmString(QString text)
 {
-    emit sendPinyin(lineEdit_window->text());//发送完成输入信号
-    lineEdit_window->clear();
+    emit sendPinyin(text);//发送完成输入信号
+    //lineEdit_window->clear();
     lineEdit_pinyin->clear();
     this->hide();//隐藏输入法窗口
 }
