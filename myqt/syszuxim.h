@@ -21,37 +21,22 @@
 **
 ****************************************************************************/
 
-#include "syszuxim.h"
-#include "syszuxpinyin.h"
+#ifndef SYSZUXIM_H
+#define SYSZUXIM_H
+#include <QWSInputMethod>
 
-SyszuxIM::SyszuxIM()
+class SyszuxPinyin;
+class SyszuxIM:public QWSInputMethod
 {
-        syszuxpinyin = new SyszuxPinyin(this);
-        //syszuxpinyin->resize(800,480);
-}
-SyszuxIM::~SyszuxIM()
-{
-    syszuxpinyin->deleteLater();
-}
+Q_OBJECT
+public:
+        SyszuxIM();
+        ~SyszuxIM();
+        void updateHandler(int);
+public slots:
+        void confirmString(QString gemfield);
+private:
+        SyszuxPinyin* syszuxpinyin;
 
-void SyszuxIM::confirmString(QString gemfield)
-{
-        sendCommitString(gemfield);
-}
-
-void SyszuxIM::updateHandler(int type)
-{
-        switch(type)
-        {
-        case QWSInputMethod::FocusIn:
-            syszuxpinyin->show();
-            break;
-        case QWSInputMethod::FocusOut:
-            syszuxpinyin->hide();
-            break;
-        default:
-            break;
-        }
-}
-
-
+};
+#endif

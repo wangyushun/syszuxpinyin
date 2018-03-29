@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>syszux/syszuxpinyin</file>
+        <file>syszux/syszuxpinyin.utf8</file>
     </qresource>
 </RCC>

@@ -61,9 +61,7 @@ private:
     QMultiMap<QString,QString> pinyin_map;
     QList<QString> pinyin_list;
     QVector<QPushButton*> button_vector;
-    int input_method;//中英输入模式，1：中文； 0：英文
-    int lower_upper;//大小写输入模式，1：大写； 0：小写
-    int page_count;//当前显示的候选汉字的页码
+    int input_method,lower_upper,page_count;
 
     //窗口可托动有关定义
     bool        mMoveing;
