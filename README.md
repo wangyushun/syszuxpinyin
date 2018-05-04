@@ -8,9 +8,6 @@ SYSZUXpinyin是一款基于Qt for Embedded linux的拼音输入法，可以输�
 
 # demo图片
  ![image](https://github.com/CivilNet/syszuxpinyin/blob/master/images/1.jpg)
- ![image](https://github.com/CivilNet/syszuxpinyin/blob/master/images/2.jpg)
- ![image](https://github.com/CivilNet/syszuxpinyin/blob/master/images/3.jpg)
- ![image](https://github.com/CivilNet/syszuxpinyin/blob/master/images/4.jpg)
 
 # 为什么从CivilNet.CN迁移至GitHub？
 SYSZUXpinyin 1.0 于2010年发布并托管在[CivilNet.CN](http://civilnet.cn)上，但是在2017年，[CivilNet.CN](http://civilnet.cn)停止对外提供服务。因此，代码现托管在GitHub上。
